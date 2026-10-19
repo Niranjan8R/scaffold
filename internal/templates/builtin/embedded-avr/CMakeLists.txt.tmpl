@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.16)
+project({{.Name}} LANGUAGES C)
+
+set(MCU   {{.Mcu}}   CACHE STRING "Target MCU")
+set(F_CPU {{.FCpu}} CACHE STRING "CPU clock in Hz")
+
+add_executable({{.Name}}.elf src/main.c)
+target_include_directories({{.Name}}.elf PRIVATE include)
+target_compile_definitions({{.Name}}.elf PRIVATE F_CPU=${F_CPU}UL)
+target_compile_options({{.Name}}.elf PRIVATE -mmcu=${MCU} -Os -Wall -Wextra)
+target_link_options({{.Name}}.elf PRIVATE -mmcu=${MCU})
+
+add_custom_command(TARGET {{.Name}}.elf POST_BUILD
+  COMMAND ${CMAKE_OBJCOPY} -O ihex -R .eeprom $<TARGET_FILE:{{.Name}}.elf> {{.Name}}.hex
+  COMMENT "Generating {{.Name}}.hex")

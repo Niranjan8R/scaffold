@@ -1,0 +1,8 @@
+{
+  "name": "cuda",
+  "description": "CUDA vector-add starter: host + kernel split, error checks, event timing",
+  "vars": [
+    {"name": "Arch", "prompt": "GPU compute capability without the dot (e.g. 75, 86, 89)", "default": "75"}
+  ],
+  "next": "  cd {{.Name}}\n  cmake -S . -B build\n  cmake --build build\n  ./build/{{.Name}}"
+}

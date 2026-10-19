@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 3.18)
+project({{.Name}} VERSION 0.1.0 LANGUAGES CXX CUDA)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CUDA_STANDARD 17)
+set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+set(CMAKE_CUDA_ARCHITECTURES {{.Arch}} CACHE STRING "GPU architectures")
+
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+endif()
+
+add_executable({{.Name}} src/main.cu src/kernels.cu)
+target_include_directories({{.Name}} PRIVATE include)
+target_compile_options({{.Name}} PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:--expt-relaxed-constexpr -lineinfo>)
+
+include(CTest)
+add_test(NAME run_{{.Name}} COMMAND {{.Name}})

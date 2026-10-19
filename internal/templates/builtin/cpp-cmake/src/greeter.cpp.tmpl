@@ -1,0 +1,9 @@
+#include "{{.NameIdent}}/greeter.hpp"
+
+namespace {{.NameIdent}} {
+
+std::string greet(const std::string& name) {
+    return "Hello, " + name + "!";
+}
+
+}  // namespace {{.NameIdent}}

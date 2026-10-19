@@ -1,0 +1,37 @@
+MCU        ?= {{.Mcu}}
+F_CPU      ?= {{.FCpu}}
+PROGRAMMER ?= arduino
+PORT       ?= /dev/ttyACM0
+BAUD       ?= 115200
+
+TARGET := build/{{.Name}}
+SRC    := $(wildcard src/*.c)
+OBJ    := $(SRC:src/%.c=build/%.o)
+
+CFLAGS  := -mmcu=$(MCU) -DF_CPU=$(F_CPU)UL -Os -std=gnu11 -Wall -Wextra -Iinclude -ffunction-sections -fdata-sections
+LDFLAGS := -mmcu=$(MCU) -Wl,--gc-sections
+
+.PHONY: all flash size clean
+
+all: $(TARGET).hex size
+
+build:
+	mkdir -p build
+
+build/%.o: src/%.c | build
+	avr-gcc $(CFLAGS) -c $< -o $@
+
+$(TARGET).elf: $(OBJ)
+	avr-gcc $(LDFLAGS) $^ -o $@
+
+$(TARGET).hex: $(TARGET).elf
+	avr-objcopy -O ihex -R .eeprom $< $@
+
+size: $(TARGET).elf
+	avr-size --mcu=$(MCU) -C $<
+
+flash: $(TARGET).hex
+	avrdude -p $(MCU) -c $(PROGRAMMER) -P $(PORT) -b $(BAUD) -U flash:w:$<:i
+
+clean:
+	rm -rf build

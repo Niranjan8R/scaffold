@@ -1,0 +1,9 @@
+{
+  "name": "embedded-avr",
+  "description": "AVR microcontroller blink with avr-gcc Makefile + CMake toolchain file",
+  "vars": [
+    {"name": "Mcu", "prompt": "Target MCU", "default": "atmega328p"},
+    {"name": "FCpu", "prompt": "CPU clock in Hz", "default": "16000000"}
+  ],
+  "next": "  cd {{.Name}}\n  make            # or: cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=cmake/avr-gcc.cmake && cmake --build build\n  make flash PORT=/dev/ttyACM0"
+}

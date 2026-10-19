@@ -1,0 +1,9 @@
+{
+  "name": "cpp-cmake",
+  "description": "C++ library + app with CMake, CTest and GoogleTest or Catch2",
+  "vars": [
+    {"name": "Std", "prompt": "C++ standard", "default": "17", "choices": ["11", "14", "17", "20", "23"]},
+    {"name": "Tests", "prompt": "Test framework", "default": "googletest", "choices": ["googletest", "catch2"]}
+  ],
+  "next": "  cd {{.Name}}\n  cmake -S . -B build\n  cmake --build build\n  ctest --test-dir build --output-on-failure\n  ./build/{{.Name}}"
+}

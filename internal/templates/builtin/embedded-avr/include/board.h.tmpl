@@ -1,0 +1,11 @@
+#ifndef {{.NameUpper}}_BOARD_H
+#define {{.NameUpper}}_BOARD_H
+
+#include <avr/io.h>
+
+/* On-board LED: PB5 is Arduino Uno's pin 13. Change for your board. */
+#define LED_DDR  DDRB
+#define LED_PORT PORTB
+#define LED_PIN  PB5
+
+#endif /* {{.NameUpper}}_BOARD_H */

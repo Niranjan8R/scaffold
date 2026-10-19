@@ -1,0 +1,35 @@
+name: ci
+on: [push, pull_request]
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+      - run: go vet ./...
+      - run: go test ./...
+
+  generated-project-builds:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+      - name: Generate and build the C++ template, then run its tests
+        run: |
+          go run . new cpp-cmake demo-app --dir "$RUNNER_TEMP" --yes
+          cmake -S "$RUNNER_TEMP/demo-app" -B "$RUNNER_TEMP/demo-app/build"
+          cmake --build "$RUNNER_TEMP/demo-app/build"
+          ctest --test-dir "$RUNNER_TEMP/demo-app/build" --output-on-failure
+      - name: Generate and build the AVR template
+        run: |
+          sudo apt-get update && sudo apt-get install -y gcc-avr avr-libc
+          go run . new embedded-avr blinky --dir "$RUNNER_TEMP" --yes
+          make -C "$RUNNER_TEMP/blinky"

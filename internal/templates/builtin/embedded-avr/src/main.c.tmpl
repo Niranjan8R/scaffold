@@ -1,0 +1,12 @@
+#include <util/delay.h>
+
+#include "board.h"
+
+int main(void) {
+    LED_DDR |= (1 << LED_PIN);
+    for (;;) {
+        LED_PORT ^= (1 << LED_PIN);
+        _delay_ms(500);
+    }
+    return 0;
+}

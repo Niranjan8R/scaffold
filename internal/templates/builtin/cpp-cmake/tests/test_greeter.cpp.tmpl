@@ -1,0 +1,15 @@
+{{if eq .Tests "catch2"}}#include <catch2/catch_test_macros.hpp>
+
+#include "{{.NameIdent}}/greeter.hpp"
+
+TEST_CASE("greet formats the name", "[greeter]") {
+    REQUIRE({{.NameIdent}}::greet("World") == "Hello, World!");
+}
+{{else}}#include <gtest/gtest.h>
+
+#include "{{.NameIdent}}/greeter.hpp"
+
+TEST(Greeter, FormatsName) {
+    EXPECT_EQ({{.NameIdent}}::greet("World"), "Hello, World!");
+}
+{{end}}

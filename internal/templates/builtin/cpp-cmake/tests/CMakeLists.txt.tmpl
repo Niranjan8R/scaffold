@@ -1,0 +1,26 @@
+include(FetchContent)
+{{if eq .Tests "catch2"}}
+FetchContent_Declare(
+  Catch2
+  URL https://github.com/catchorg/Catch2/archive/refs/tags/v3.5.2.zip)
+FetchContent_MakeAvailable(Catch2)
+list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
+
+add_executable(unit_tests test_greeter.cpp)
+target_link_libraries(unit_tests PRIVATE {{.NameIdent}}_lib Catch2::Catch2WithMain)
+
+include(Catch)
+catch_discover_tests(unit_tests)
+{{else}}
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip)
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
+add_executable(unit_tests test_greeter.cpp)
+target_link_libraries(unit_tests PRIVATE {{.NameIdent}}_lib GTest::gtest_main)
+
+include(GoogleTest)
+gtest_discover_tests(unit_tests)
+{{end}}

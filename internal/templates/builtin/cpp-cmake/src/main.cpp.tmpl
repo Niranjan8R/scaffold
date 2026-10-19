@@ -1,0 +1,8 @@
+#include <iostream>
+
+#include "{{.NameIdent}}/greeter.hpp"
+
+int main(int argc, char** argv) {
+    std::cout << {{.NameIdent}}::greet(argc > 1 ? argv[1] : "World") << '\n';
+    return 0;
+}

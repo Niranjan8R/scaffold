@@ -1,0 +1,8 @@
+{
+  "name": "python-pkg",
+  "description": "Example custom template: minimal Python package",
+  "vars": [
+    {"name": "PyVersion", "prompt": "Minimum Python version", "default": "3.10", "choices": ["3.9", "3.10", "3.11", "3.12"]}
+  ],
+  "next": "  cd {{.Name}} && pip install -e ."
+}
